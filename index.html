@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOC-HUB - Threat Intelligence Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <nav class="bg-gray-800 border-b border-gray-700">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-blue-500">IOC-HUB</h1>
+                <div class="space-x-4">
+                    <a href="login.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg inline-block">
+                        Login
+                    </a>
+                    <a href="register.html" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg inline-block">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-1 container mx-auto px-4 py-16">
+            <div class="text-center mb-16">
+                <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+                    IOC-HUB
+                </h1>
+                <p class="text-2xl text-gray-300 mb-8">
+                    Threat Intelligence Platform
+                </p>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+                    Centralized platform for managing Indicators of Compromise (IOC) with real-time URLhaus API integration
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="login.html" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-lg font-semibold">
+                        Get Started
+                    </a>
+                    <a href="#features" class="px-8 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-lg font-semibold">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+
+            <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h3 class="text-xl font-bold mb-2">URLhaus Integration</h3>
+                    <p class="text-gray-400">
+                        Direct integration with URLhaus API for real-time malware URL detection and analysis
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-bold mb-2">IOC Management</h3>
+                    <p class="text-gray-400">
+                        Manage URLs, IPs, and Domains with comprehensive threat intelligence data
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h3 class="text-xl font-bold mb-2">Secure Access</h3>
+                    <p class="text-gray-400">
+                        JWT-based authentication with role-based access control (Admin & User)
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Real-time Statistics</h3>
+                    <p class="text-gray-400">
+                        Monitor IOC trends and threat intelligence metrics in real-time
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-2">Fast & Lightweight</h3>
+                    <p class="text-gray-400">
+                        Built with Node.js and SQLite for optimal performance in local labs
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-blue-500 transition">
+                    <div class="text-4xl mb-4">🔄</div>
+                    <h3 class="text-xl font-bold mb-2">Auto Sync</h3>
+                    <p class="text-gray-400">
+                        Automatically sync latest malware URLs and payloads from URLhaus
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-8 border border-gray-700 mb-16">
+                <h2 class="text-3xl font-bold mb-6 text-center">Key Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">Multi-type IOC Support</h4>
+                            <p class="text-gray-400 text-sm">Track URLs, IP addresses, and domains</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">URLhaus API Query</h4>
+                            <p class="text-gray-400 text-sm">Query URLs, hosts, tags, and payloads</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">Blacklist Status</h4>
+                            <p class="text-gray-400 text-sm">Check SURBL and Spamhaus DBL status</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">Payload Analysis</h4>
+                            <p class="text-gray-400 text-sm">Track malware families and file hashes</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">Advanced Filtering</h4>
+                            <p class="text-gray-400 text-sm">Filter by type, status, and search terms</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-green-500 text-xl">✓</span>
+                        <div>
+                            <h4 class="font-semibold mb-1">RESTful API</h4>
+                            <p class="text-gray-400 text-sm">Full API for automation and integration</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg p-12 text-center border border-blue-700">
+                <h2 class="text-3xl font-bold mb-4">Ready to Start?</h2>
+                <p class="text-xl text-gray-200 mb-8">
+                    Join IOC-HUB and enhance your threat intelligence capabilities
+                </p>
+                <a href="register.html" class="px-8 py-3 bg-white text-blue-900 hover:bg-gray-100 rounded-lg text-lg font-semibold inline-block">
+                    Create Free Account
+                </a>
+            </div>
+        </main>
+
+        <footer class="bg-gray-800 border-t border-gray-700 py-8 mt-16">
+            <div class="container mx-auto px-4 text-center text-gray-400">
+                <p class="mb-2">IOC-HUB - Threat Intelligence Platform</p>
+                <p class="text-sm">Powered by URLhaus API | Built with Node.js & Tailwind CSS</p>
+                <div class="mt-4 space-x-4">
+                    <a href="login.html" class="hover:text-blue-400">Login</a>
+                    <span>•</span>
+                    <a href="register.html" class="hover:text-blue-400">Register</a>
+                    <span>•</span>
+                    <a href="/api/health" class="hover:text-blue-400">API Status</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        if (localStorage.getItem('accessToken')) {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            window.location.href = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
