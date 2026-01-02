@@ -1,8 +1,11 @@
-const { IOC } = require('../models');
-const { Op } = require('sequelize');
+//khusus CRUD + statistik IOC
+const { IOC } = require('../models');//import model IOC
+const { Op } = require('sequelize');//import operator sequelize
 
+//controller untuk mendapatkan semua IOC dengan pagination, filter, dan sorting
 exports.getAllIOCs = async (req, res) => {
   try {
+    //dapatkan query parameters
     const { 
       page = 1, 
       limit = 50, 
@@ -12,12 +15,14 @@ exports.getAllIOCs = async (req, res) => {
       sortBy = 'created_at',
       sortOrder = 'DESC'
     } = req.query;
-
+    //hitung offset untuk pagination page 1 = 0, page 2 = 50, dst
     const offset = (page - 1) * limit;
+    //objek where untuk filter
     const where = {};
-
+    //tambahkan filter
     if (type) where.type = type;
     if (status) where.status = status;
+    //tambahkan pencarian di value, threat, dan reporter
     if (search) {
       where[Op.or] = [
         { value: { [Op.like]: `%${search}%` } },
@@ -25,14 +30,14 @@ exports.getAllIOCs = async (req, res) => {
         { reporter: { [Op.like]: `%${search}%` } },
       ];
     }
-
+    //dapatkan data dengan pagination, filter, dan sorting dari database(findAndCountAll dari sequelize)
     const { count, rows } = await IOC.findAndCountAll({
       where,
       limit: parseInt(limit),
       offset,
       order: [[sortBy, sortOrder]],
     });
-
+    //kirim response
     res.json({
       success: true,
       data: {
@@ -55,6 +60,7 @@ exports.getAllIOCs = async (req, res) => {
   }
 };
 
+//controller untuk mendapatkan IOC berdasarkan ID
 exports.getIOCById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -81,6 +87,7 @@ exports.getIOCById = async (req, res) => {
   }
 };
 
+//controller untuk membuat IOC baru
 exports.createIOC = async (req, res) => {
   try {
     const iocData = req.body;
@@ -101,6 +108,7 @@ exports.createIOC = async (req, res) => {
   }
 };
 
+//controller untuk memperbarui IOC berdasarkan ID
 exports.updateIOC = async (req, res) => {
   try {
     const { id } = req.params;
@@ -131,6 +139,7 @@ exports.updateIOC = async (req, res) => {
   }
 };
 
+//controller untuk menghapus IOC berdasarkan ID
 exports.deleteIOC = async (req, res) => {
   try {
     const { id } = req.params;
@@ -159,8 +168,10 @@ exports.deleteIOC = async (req, res) => {
   }
 };
 
+//controller untuk mendapatkan statistik IOC
 exports.getStatistics = async (req, res) => {
   try {
+    //hitung total IOC, IOC berdasarkan tipe, status, dan threat
     const totalIOCs = await IOC.count();
     const byType = await IOC.findAll({
       attributes: [
@@ -186,7 +197,7 @@ exports.getStatistics = async (req, res) => {
       group: ['threat'],
       limit: 10,
     });
-
+    //kirim response
     res.json({
       success: true,
       data: {

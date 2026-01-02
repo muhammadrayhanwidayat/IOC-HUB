@@ -38,7 +38,7 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     date_added: {
-      type: DataTypes.STRING, // API returns human-readable timestamps; keep string for now
+      type: DataTypes.STRING,
       allowNull: true,
     },
     reporter: {

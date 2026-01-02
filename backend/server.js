@@ -1,21 +1,21 @@
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); //agar frontend bisa akses API
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config(); //load .env ke process.env
 
-const { testConnection } = require('./config/database');
-const { initializeDatabase } = require('./models');
+const { testConnection } = require('./config/database'); // setup koneksi Sequelize
+const { initializeDatabase } = require('./models'); // bakal inisialisasi DB dan buat admin default dari index.js
 
-const authRoutes = require('./routes/auth');
-const iocRoutes = require('./routes/ioc');
-const urlhausRoutes = require('./routes/urlhaus');
+const authRoutes = require('./routes/auth'); //login, register, refresh token
+const iocRoutes = require('./routes/ioc'); //manage IOC
+const urlhausRoutes = require('./routes/urlhaus'); //proxy / fetch data dari URLhaus
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cors()); //izinkan request lintas domain
+app.use(express.json()); //parsing JSON body
+app.use(express.urlencoded({ extended: true })); //parsing form-data
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 
@@ -23,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/ioc', iocRoutes);
 app.use('/api/urlhaus', urlhausRoutes);
 
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -31,6 +32,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Global error handler)
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
@@ -40,6 +42,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+//404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -47,6 +50,7 @@ app.use((req, res) => {
   });
 });
 
+// Start the server after testing DB connection and initializing DB
 const startServer = async () => {
   try {
     console.log('🚀 Starting IOC-HUB Server...');

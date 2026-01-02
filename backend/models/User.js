@@ -43,6 +43,7 @@ module.exports = (sequelize) => {
     },
   }, {
     tableName: 'users',
+    //hash password sebelum disimpan
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {

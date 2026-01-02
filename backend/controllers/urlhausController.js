@@ -1,9 +1,11 @@
-const urlhausService = require('../services/urlhausService');
-const { IOC } = require('../models');
+const urlhausService = require('../services/urlhausService');//service untuk berinteraksi dengan API URLhaus
+const { IOC } = require('../models');//import model IOC
 
+//fungsi untuk menentukan tipe IOC berdasarkan value
 const extractIOCType = (value) => {
   if (!value) return 'unknown';
-  
+
+  //jika value mengandung http/https maka tipe url, jika format IP maka ip, selain itu domain
   const urlPattern = /^https?:\/\//i;
   const ipPattern = /^(\d{1,3}\.){3}\d{1,3}$/;
   
@@ -12,16 +14,18 @@ const extractIOCType = (value) => {
   return 'domain';
 };
 
+//fungsi untuk menyimpan data IOC dari URLhaus ke database
 const saveIOCFromURLhaus = async (urlData) => {
   try {
+    //tentukan tipe IOC
     const type = extractIOCType(urlData.url || urlData.host);
-    
+    //cek apakah IOC dengan urlhaus_id sudah ada di database
     const existingIOC = await IOC.findOne({
       where: {
         urlhaus_id: urlData.id || urlData.url_id,
       },
     });
-
+    //siapkan data IOC untuk disimpan atau diperbarui(normalisasi data)
     const iocData = {
       type,
       value: urlData.url || urlData.host,
@@ -42,7 +46,7 @@ const saveIOCFromURLhaus = async (urlData) => {
         url_count: urlData.url_count,
       },
     };
-
+    //jika sudah ada, perbarui data, jika belum buat baru
     if (existingIOC) {
       await existingIOC.update(iocData);
       return existingIOC;
@@ -54,10 +58,11 @@ const saveIOCFromURLhaus = async (urlData) => {
     throw error;
   }
 };
-
+//controller untuk menyinkronkan URL terbaru dari URLhaus
 exports.syncRecentURLs = async (req, res) => {
   try {
     const { limit = 100 } = req.query;
+    //dapatkan data dari URLhaus
     const data = await urlhausService.getRecentURLs(parseInt(limit));
 
     if (data.query_status !== 'ok') {
@@ -67,7 +72,7 @@ exports.syncRecentURLs = async (req, res) => {
         data,
       });
     }
-
+    //simpan setiap URL ke database
     const savedIOCs = [];
     for (const url of data.urls || []) {
       try {
@@ -77,7 +82,7 @@ exports.syncRecentURLs = async (req, res) => {
         console.error('Error saving URL:', error);
       }
     }
-
+    //kirim response
     res.json({
       success: true,
       message: `Synced ${savedIOCs.length} URLs from URLhaus`,
@@ -95,7 +100,7 @@ exports.syncRecentURLs = async (req, res) => {
     });
   }
 };
-
+//controller untuk menyinkronkan payload terbaru dari URLhaus
 exports.syncRecentPayloads = async (req, res) => {
   try {
     const { limit = 100 } = req.query;
@@ -124,9 +129,11 @@ exports.syncRecentPayloads = async (req, res) => {
   }
 };
 
+//controller untuk query URL dari URLhaus
 exports.queryURL = async (req, res) => {
   try {
     const { url } = req.body;
+    //dapatkan data dari URLhaus
     const data = await urlhausService.queryURL(url);
 
     if (data.query_status === 'ok') {
@@ -148,9 +155,11 @@ exports.queryURL = async (req, res) => {
   }
 };
 
+//controller untuk query host dari URLhaus
 exports.queryHost = async (req, res) => {
   try {
     const { host } = req.body;
+    //dapatkan data dari URLhaus
     const data = await urlhausService.queryHost(host);
 
     if (data.query_status === 'ok' && data.urls) {
@@ -163,6 +172,7 @@ exports.queryHost = async (req, res) => {
           console.error('Error saving URL:', error);
         }
       }
+      //tambahkan daftar IOC yang disimpan ke response
       data.savedIOCs = savedIOCs;
     }
 
@@ -180,9 +190,11 @@ exports.queryHost = async (req, res) => {
   }
 };
 
+//controller untuk query payload dari URLhaus 
 exports.queryPayload = async (req, res) => {
   try {
     const { hash, hashType = 'sha256' } = req.body;
+    //dapatkan data dari URLhaus berupa payload
     const data = await urlhausService.queryPayload(hash, hashType);
 
     res.json({
@@ -199,9 +211,11 @@ exports.queryPayload = async (req, res) => {
   }
 };
 
+//controller untuk query tag dari URLhaus
 exports.queryTag = async (req, res) => {
   try {
     const { tag } = req.body;
+    //dapatkan data dari URLhaus berupa tag
     const data = await urlhausService.queryTag(tag);
 
     res.json({

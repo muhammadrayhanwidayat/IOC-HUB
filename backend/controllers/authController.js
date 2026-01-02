@@ -1,19 +1,21 @@
-const jwt = require('jsonwebtoken');
-const { User } = require('../models');
-const jwtConfig = require('../config/jwt');
+const jwt = require('jsonwebtoken');//import jwt
+const { User } = require('../models');//import model User
+const jwtConfig = require('../config/jwt');//import config jwt
 
+//fungsi untuk generate access dan refresh token
 const generateTokens = (user) => {
+  //buat payload token
   const payload = {
     id: user.id,
     username: user.username,
     email: user.email,
     role: user.role,
   };
-
+  //generate access token
   const accessToken = jwt.sign(payload, jwtConfig.access.secret, {
     expiresIn: jwtConfig.access.expiresIn,
   });
-
+  //generate refresh token
   const refreshToken = jwt.sign(payload, jwtConfig.refresh.secret, {
     expiresIn: jwtConfig.refresh.expiresIn,
   });
@@ -21,10 +23,12 @@ const generateTokens = (user) => {
   return { accessToken, refreshToken };
 };
 
+//controller untuk register
 exports.register = async (req, res) => {
   try {
+    //dapatkan data dari body request
     const { username, email, password } = req.body;
-
+    //cek apakah username atau email sudah terdaftar
     const existingUser = await User.findOne({
       where: {
         [require('sequelize').Op.or]: [{ username }, { email }],
@@ -37,14 +41,14 @@ exports.register = async (req, res) => {
         message: 'Username or email already exists',
       });
     }
-
+    //buat user baru
     const user = await User.create({
       username,
       email,
       password,
       role: 'user',
     });
-
+    //generate token untuk user baru
     const { accessToken, refreshToken } = generateTokens(user);
     await user.update({ refresh_token: refreshToken });
 
@@ -66,11 +70,11 @@ exports.register = async (req, res) => {
     });
   }
 };
-
+//controller untuk login
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
-
+    //cari user berdasarkan username
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
@@ -79,23 +83,23 @@ exports.login = async (req, res) => {
         message: 'Invalid credentials',
       });
     }
-
+    //cek apakah user aktif
     if (!user.is_active) {
       return res.status(403).json({
         success: false,
         message: 'Account is inactive',
       });
     }
-
+    //cek password dengan method comparePassword di model User
     const isValidPassword = await user.comparePassword(password);
-
+    //jika password tidak valid
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials',
       });
     }
-
+    //generate token dengan fungsi generateTokens
     const { accessToken, refreshToken } = generateTokens(user);
     await user.update({ refresh_token: refreshToken });
 
@@ -118,13 +122,15 @@ exports.login = async (req, res) => {
   }
 };
 
+//controller untuk refresh token
 exports.refreshToken = async (req, res) => {
   try {
+    //dapatkan user dari database berdasarkan id dari req.user (setelah middleware auth memverifikasi token)
     const user = await User.findByPk(req.user.id);
-    
+    //generate token baru
     const { accessToken, refreshToken } = generateTokens(user);
     await user.update({ refresh_token: refreshToken });
-
+    //kirim response
     res.json({
       success: true,
       message: 'Token refreshed successfully',
@@ -142,14 +148,14 @@ exports.refreshToken = async (req, res) => {
     });
   }
 };
-
+//controller untuk logout
 exports.logout = async (req, res) => {
   try {
     await User.update(
       { refresh_token: null },
       { where: { id: req.user.id } }
     );
-
+    //kirim response
     res.json({
       success: true,
       message: 'Logged out successfully',
@@ -164,10 +170,12 @@ exports.logout = async (req, res) => {
   }
 };
 
+//controller untuk mendapatkan profile user
 exports.getProfile = async (req, res) => {
   try {
+    //dapatkan user dari database berdasarkan id dari req.user (setelah middleware auth memverifikasi token)
     const user = await User.findByPk(req.user.id);
-    
+    //kirim response
     res.json({
       success: true,
       data: user.toJSON(),

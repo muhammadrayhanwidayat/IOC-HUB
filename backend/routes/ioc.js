@@ -1,9 +1,13 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express');//import express
+const router = express.Router();//import router dari express
+//import controller ioc untuk menghandle request IOC
 const iocController = require('../controllers/iocController');
+//import middleware auth untuk verifikasi token(verifyAccessToken)
 const { verifyAccessToken } = require('../middleware/auth');
+//import middleware roleCheck untuk pengecekan role (isAdmin, isUser)
 const { isAdmin, isUser } = require('../middleware/roleCheck');
 
+//gunakan middleware auth untuk semua route di file ini
 router.use(verifyAccessToken);
 
 // GET list (user & admin)
