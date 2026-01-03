@@ -135,6 +135,51 @@ async function syncURLs() {
   }
 }
 
+async function queryURLhaus() {
+    const queryType = document.getElementById('queryType').value;
+    const queryValue = document.getElementById('queryInput').value.trim();
+    const resultDiv = document.getElementById('queryResult');
+    const resultText = document.getElementById('queryResultText');
+
+    if (!queryValue) {
+        alert('Please enter a value to query');
+        return;
+    }
+
+    resultDiv.classList.remove('hidden');
+    resultText.textContent = 'Querying URLhaus...';
+
+    const endpoints = {
+        'url': '/urlhaus/query/url',
+        'host': '/urlhaus/query/host',
+        'tag': '/urlhaus/query/tag',
+        'payload': '/urlhaus/query/payload'
+    };
+
+    const bodies = {
+        'url': { url: queryValue },
+        'host': { host: queryValue },
+        'tag': { tag: queryValue },
+        'payload': { hash: queryValue, hashType: 'sha256' }
+    };
+
+    const data = await window.apiRequest(endpoints[queryType], {
+        method: 'POST',
+        body: JSON.stringify(bodies[queryType])
+    });
+
+    if (data) {
+        resultText.textContent = JSON.stringify(data, null, 2);
+        if (data.success) {
+            loadIOCs();
+            loadStatistics();
+        }
+    } else {
+        resultText.textContent = 'Error querying URLhaus';
+    }
+}
+
+
 async function deleteIOC(id) {
     if (!confirm('Are you sure you want to delete this IOC?')) {
         return;
