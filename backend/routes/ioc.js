@@ -10,8 +10,13 @@ const { isAdmin, isUser } = require('../middleware/roleCheck');
 //gunakan middleware auth untuk semua route di file ini
 router.use(verifyAccessToken);
 
+// Stats (admin or user)
+router.get('/stats', isUser, iocController.getStatistics);
+
+
 // GET list (user & admin)
 router.get('/', isUser, iocController.getAllIOCs);
+
 
 // GET detail
 router.get('/:id', isUser, iocController.getIOCById);
@@ -25,7 +30,6 @@ router.put('/:id', isAdmin, iocController.updateIOC);
 // DELETE (admin only)
 router.delete('/:id', isAdmin, iocController.deleteIOC);
 
-// Stats (admin or user)
-router.get('/stats', isUser, iocController.getStatistics);
+
 
 module.exports = router;

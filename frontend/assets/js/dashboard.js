@@ -1,92 +1,24 @@
-const API_URL = 'http://localhost:3000/api';
+// assets/js/dashboard.js
+// REQUIRE: common.js must be included before this script
 let currentPage = 1;
 let totalPages = 1;
 
-function checkAuth() {
-    const token = localStorage.getItem('accessToken');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    if (!token) {
-        window.location.href = 'login.html';
-        return;
+function updateUserInfoDisplay() {
+    const user = window.getAuthUser ? window.getAuthUser() : null;
+    if (user) {
+        document.getElementById('userInfo').textContent = `${user.username} (${user.role})`;
     }
-    
-    document.getElementById('userInfo').textContent = `${user.username} (${user.role})`;
-}
-
-async function apiRequest(endpoint, options = {}) {
-    const token = localStorage.getItem('accessToken');
-    
-    try {
-        const response = await fetch(`${API_URL}${endpoint}`, {
-            ...options,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-                ...options.headers
-            }
-        });
-
-        if (response.status === 401) {
-            const data = await response.json();
-            if (data.code === 'TOKEN_EXPIRED') {
-                const refreshed = await refreshToken();
-                if (refreshed) {
-                    return apiRequest(endpoint, options);
-                }
-            }
-            logout();
-            return null;
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('API request error:', error);
-        return null;
-    }
-}
-
-async function refreshToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-    
-    try {
-        const response = await fetch(`${API_URL}/auth/refresh`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken })
-        });
-
-        const data = await response.json();
-        
-        if (data.success) {
-            localStorage.setItem('accessToken', data.data.accessToken);
-            localStorage.setItem('refreshToken', data.data.refreshToken);
-            return true;
-        }
-    } catch (error) {
-        console.error('Token refresh error:', error);
-    }
-    
-    return false;
-}
-
-function logout() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    window.location.href = 'login.html';
 }
 
 async function loadStatistics() {
-    const data = await apiRequest('/ioc/statistics');
-    
+    const data = await window.apiRequest('/ioc/stats');
     if (data && data.success) {
         document.getElementById('totalIOCs').textContent = data.data.total;
-        
+
         const urlCount = data.data.byType.find(t => t.type === 'url')?.count || 0;
         const ipCount = data.data.byType.find(t => t.type === 'ip')?.count || 0;
         const domainCount = data.data.byType.find(t => t.type === 'domain')?.count || 0;
-        
+
         document.getElementById('totalURLs').textContent = urlCount;
         document.getElementById('totalIPs').textContent = ipCount;
         document.getElementById('totalDomains').textContent = domainCount;
@@ -101,14 +33,14 @@ async function loadIOCs() {
         sortBy: 'created_at',
         sortOrder: 'DESC'
     });
-    
+
     if (type) params.append('type', type);
-    
-    const data = await apiRequest(`/ioc?${params}`);
-    
+
+    const data = await window.apiRequest(`/ioc?${params}`);
+
     if (data && data.success) {
         const tbody = document.getElementById('iocTable');
-        
+
         if (data.data.iocs.length === 0) {
             tbody.innerHTML = `
                 <tr>
@@ -119,7 +51,7 @@ async function loadIOCs() {
             `;
             return;
         }
-        
+
         tbody.innerHTML = data.data.iocs.map(ioc => `
             <tr class="hover:bg-gray-700">
                 <td class="px-4 py-2">
@@ -147,11 +79,11 @@ async function loadIOCs() {
                 <td class="px-4 py-2 text-sm">${new Date(ioc.date_added || ioc.created_at).toLocaleDateString()}</td>
             </tr>
         `).join('');
-        
+
         totalPages = data.data.pagination.totalPages;
-        document.getElementById('pageInfo').textContent = 
+        document.getElementById('pageInfo').textContent =
             `Page ${currentPage} of ${totalPages}`;
-        
+
         document.getElementById('prevBtn').disabled = currentPage === 1;
         document.getElementById('nextBtn').disabled = currentPage === totalPages;
     }
@@ -168,24 +100,24 @@ async function queryURLhaus() {
     const query = document.getElementById('queryInput').value.trim();
     const resultDiv = document.getElementById('queryResult');
     const resultText = document.getElementById('queryResultText');
-    
+
     if (!query) {
         alert('Please enter a URL, IP, or domain');
         return;
     }
-    
+
     resultDiv.classList.remove('hidden');
     resultText.textContent = 'Querying...';
-    
+
     const isURL = query.startsWith('http://') || query.startsWith('https://');
     const endpoint = isURL ? '/urlhaus/query/url' : '/urlhaus/query/host';
     const body = isURL ? { url: query } : { host: query };
-    
-    const data = await apiRequest(endpoint, {
+
+    const data = await window.apiRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify(body)
     });
-    
+
     if (data) {
         resultText.textContent = JSON.stringify(data, null, 2);
         if (data.success) {
@@ -197,6 +129,9 @@ async function queryURLhaus() {
     }
 }
 
-checkAuth();
-loadStatistics();
-loadIOCs();
+// Initialize page
+if (window.checkAuth && window.checkAuth()) {
+    updateUserInfoDisplay();
+    loadStatistics();
+    loadIOCs();
+}
