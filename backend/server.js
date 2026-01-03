@@ -27,7 +27,7 @@ app.use('/api/urlhaus', urlhausRoutes);
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
-    message: 'IOC-HUB API is running',
+    message: 'Jormungand API is running',
     timestamp: new Date().toISOString(),
   });
 });
@@ -53,7 +53,7 @@ app.use((req, res) => {
 // Start the server after testing DB connection and initializing DB
 const startServer = async () => {
   try {
-    console.log('🚀 Starting IOC-HUB Server...');
+    console.log('🚀 Starting Jormungand Server...');
     
     await testConnection();
     await initializeDatabase();

@@ -3,60 +3,87 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IOC-HUB — Dashboard</title>
+  <title>Jormungand — Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
   <nav class="bg-gray-800 border-b border-gray-700">
     <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-blue-500">IOC-HUB</h1>
+      <h1 class="text-2xl font-bold text-blue-500">Jormungand</h1>
       <div class="flex items-center space-x-4">
         <span id="userInfo" class="text-gray-300"></span>
-        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg">Logout</button>
+        <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded-lg">
+          Logout
+        </button>
       </div>
     </div>
   </nav>
 
   <main class="container mx-auto p-6">
-    <section class="mb-6">
-      <div>Total IOCs: <span id="totalIOCs">—</span></div>
-      <div>URLs: <span id="totalURLs">0</span> | IPs: <span id="totalIPs">0</span> | Domains: <span id="totalDomains">0</span></div>
+    <!-- Stats -->
+    <section class="mb-6 grid grid-cols-2 gap-4">
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Total URLs</p>
+        <p id="totalURLs" class="text-3xl font-bold text-blue-400">—</p>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p class="text-gray-400 text-sm">Total Records</p>
+        <p id="totalIOCs" class="text-3xl font-bold">—</p>
+      </div>
     </section>
 
-    <section>
-      <div class="mb-4">
-        <select id="filterType" class="border p-2 rounded">
-          <option value="">All</option>
-          <option value="url">URL</option>
-          <option value="ip">IP</option>
-          <option value="domain">Domain</option>
-        </select>
-      </div>
+    <!-- URL Table -->
+    <section class="bg-gray-800 rounded-lg p-4">
+      <h2 class="text-lg font-bold mb-4">URL Database</h2>
 
-      <div class="overflow-x-auto bg-gray-800 rounded-lg p-4">
-        <table class="min-w-full divide-y divide-gray-700" id="iocTable">
-          <!-- Rows will be injected by JS -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-700">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-4 py-2 text-left">URL</th>
+              <th class="px-4 py-2 text-left">Status</th>
+              <th class="px-4 py-2 text-left">Date</th>
+            </tr>
+          </thead>
+          <tbody id="iocTable"></tbody>
         </table>
       </div>
 
-      <div class="mt-4 flex items-center justify-between">
-        <button id="prevBtn" onclick="changePage(-1)" class="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">Prev</button>
+      <div class="mt-4 flex justify-between">
+        <button id="prevBtn" onclick="changePage(-1)"
+          class="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">Prev</button>
         <span id="pageInfo">Page 1</span>
-        <button id="nextBtn" onclick="changePage(1)" class="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">Next</button>
+        <button id="nextBtn" onclick="changePage(1)"
+          class="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">Next</button>
       </div>
     </section>
 
-    <section class="mt-6">
-      <div class="flex gap-2">
-        <input id="queryInput" placeholder="Masukkan URL" class="flex-1 border p-2 rounded bg-gray-800">
-        <button onclick="queryURLhaus()" class="px-4 py-2 bg-blue-600 rounded">Query URLhaus</button>
-      </div>
-      <div id="queryResult" class="mt-4 hidden">
-        <pre id="queryResultText" class="bg-gray-900 p-3 rounded border overflow-auto"></pre>
-      </div>
-    </section>
+    <!-- Query -->
+<section class="mt-6">
+  <form onsubmit="event.preventDefault(); queryURLhaus();">
+    <div class="flex gap-2">
+      <input id="queryInput"
+        placeholder="Masukkan URL (contoh: http://x.x.x.x/bin.sh)"
+        class="flex-1 border p-2 rounded bg-gray-800">
+
+      <button type="submit"
+        class="px-4 py-2 bg-blue-600 rounded">
+        Query URLhaus
+      </button>
+    </div>
+  </form>
+
+  <div id="queryResult" class="mt-4 hidden">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-2">Query Result</h3>
+      <div id="queryResultContent"></div>
+    </div>
+  </div>
+</section>
+
   </main>
+
   <script src="assets/js/common.js"></script>
-  <script src="assets/js/dashboard.js" defer></script>
+  <script src="assets/js/dashboard.js"></script>
 </body>
 </html>

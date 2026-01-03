@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - IOC-HUB</title>
+    <title>Admin Dashboard - Jormungand</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <nav class="bg-gray-800 border-b border-gray-700">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-500">IOC-HUB Admin</h1>
+            <h1 class="text-2xl font-bold text-blue-500">Jormungand Admin</h1>
             <div class="flex items-center space-x-4">
                 <span id="userInfo" class="text-gray-300"></span>
                 <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg">
@@ -20,24 +20,17 @@
     </nav>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h3 class="text-gray-400 text-sm mb-2">Total IOCs</h3>
-                <p id="totalIOCs" class="text-3xl font-bold">-</p>
-            </div>
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h3 class="text-gray-400 text-sm mb-2">URLs</h3>
+                <h3 class="text-gray-400 text-sm mb-2">Total URLs</h3>
                 <p id="totalURLs" class="text-3xl font-bold text-blue-500">-</p>
             </div>
             <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h3 class="text-gray-400 text-sm mb-2">IPs</h3>
-                <p id="totalIPs" class="text-3xl font-bold text-green-500">-</p>
-            </div>
-            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                <h3 class="text-gray-400 text-sm mb-2">Domains</h3>
-                <p id="totalDomains" class="text-3xl font-bold text-purple-500">-</p>
+                <h3 class="text-gray-400 text-sm mb-2">Total Records</h3>
+                <p id="totalIOCs" class="text-3xl font-bold">-</p>
             </div>
         </div>
+
 
         <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 mb-8">
             <h2 class="text-xl font-bold mb-4">URLhaus Sync</h2>
@@ -53,12 +46,12 @@
                         Sync Recent URLs
                     </button>
                 </div>
-                <div class="flex items-end">
+                <!-- <div class="flex items-end">
                     <button onclick="syncPayloads()" 
                         class="w-full bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg">
                         Sync Recent Payloads
                     </button>
-                </div>
+                </div> -->
             </div>
             <div id="syncResult" class="mt-4 hidden">
                 <div class="bg-gray-700 rounded-lg p-4">
@@ -75,7 +68,7 @@
                         <option value="url">URL Query</option>
                         <option value="host">Host Query</option>
                         <option value="tag">Tag Query</option>
-                        <option value="payload">Payload Query (SHA256)</option>
+                        
                     </select>
                     <input type="text" id="queryInput" placeholder="Enter query value"
                         class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none">
@@ -102,10 +95,10 @@
                         class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none">
                     <select id="filterType" onchange="loadIOCs()" 
                         class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg">
-                        <option value="">All Types</option>
+                        <!-- <option value="">All Types</option> -->
                         <option value="url">URLs</option>
-                        <option value="ip">IPs</option>
-                        <option value="domain">Domains</option>
+                        <!-- <option value="ip">IPs</option>
+                        <option value="domain">Domains</option> -->
                     </select>
                     <select id="filterStatus" onchange="loadIOCs()" 
                         class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg">
