@@ -40,6 +40,115 @@ Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query a
 <img width="1919" height="1079" alt="Screenshot 2026-01-04 082754" src="https://github.com/user-attachments/assets/38c31ce0-6c88-48ca-8ef3-f60f5d39503a" />
 
 ---
+## Arsitektur
+### General System Architecture
+<img width="2634" height="1173" alt="diagram-export-1-4-2026-8_43_46-AM" src="https://github.com/user-attachments/assets/76db22bf-541b-4eae-9292-5cadaabdd285" />
+
+### 3 Tier Architecture (IOC-HUB)
+
+#### 1.Presentation Layer
+**Komponen**
+- Web Dashboard (Admin & User)
+- API Client (Browser / HTTP Client)
+
+**Teknologi**
+HTML
+- Tailwind CSS
+- JavaScript (Vanilla JS)
+
+**menampilkan**
+- Dashboard IOC (statistik ancaman)
+- Daftar & detail IOC
+- Status sinkronisasi URLhaus
+- Informasi user & role
+- Hasil query ancaman (URL)
+- Health status sistem
+
+#### 2.Application Layer
+**Komponen**
+- API Gateway Server (Node.js + Express)
+- Middleware Security
+- Controller & Service Layer
+
+**Business Logic**
+Authentication & Authorization
+- Login, Register, Logout
+- JWT Access & Refresh Token
+  
+Role-Based Access Control
+- Admin
+- User
+
+IOC Management
+- Create, Read, Update, Delete IOC
+
+Threat Intelligence Integration
+- URLhaus URL Query
+
+IOC Statistics & Reporting
+
+**Security**
+- JWT Authentication
+- Refresh Token Validation
+- Role-Based Access Control
+- Input Validation & Sanitization
+- Error Handling & Logging
+
+#### 2.Data Layer
+**Database**
+- SQLite (Sequelize ORM)
+
+Tabel Utama
+- User
+(username, email, password hash, role, refresh token)
+- IOC
+(type, value, threat, status, source, metadata)
+
+
+## 3.API Endpoint
+**Authentication & User Management**
+| Method | Endpoint             | Deskripsi                           |
+| ------ | -------------------- | ----------------------------------- |
+| POST   | `/api/auth/register` | Mendaftarkan user baru              |
+| POST   | `/api/auth/login`    | Login user dan generate JWT         |
+| POST   | `/api/auth/refresh`  | Generate ulang access token         |
+| POST   | `/api/auth/logout`   | Logout dan invalidate refresh token |
+| GET    | `/api/auth/profile`  | Melihat profil user (perlu login)   |
+
+**IOC Management**
+| Method | Endpoint         | Deskripsi                 |
+| ------ | ---------------- | ------------------------- |
+| GET    | `/api/ioc`       | Melihat daftar IOC        |
+| GET    | `/api/ioc/:id`   | Detail IOC                |
+| POST   | `/api/ioc`       | Menambah IOC (Admin only) |
+| PUT    | `/api/ioc/:id`   | Update IOC (Admin only)   |
+| DELETE | `/api/ioc/:id`   | Hapus IOC (Admin only)    |
+| GET    | `/api/ioc/stats` | Statistik IOC             |
+
+**Cyber Threat Intelligence Services (URLhaus)**
+| Method | Endpoint                     | Deskripsi & Response                                 |
+| ------ | ---------------------------- | ---------------------------------------------------- |
+| POST   | `/api/urlhaus/query/url`     | Mengecek URL berbahaya<br>Response: JSON threat data |
+| POST   | `/api/urlhaus/query/host`    | Mengecek host/IP<br>Response: JSON                   |
+| POST   | `/api/urlhaus/query/payload` | Mengecek payload malware<br>Response: JSON           |
+| POST   | `/api/urlhaus/query/tag`     | Query berdasarkan tag ancaman<br>Response: JSON      |
+| GET    | `/api/urlhaus/sync/urls`     | Sinkronisasi URL terbaru (Admin)                     |
+| GET    | `/api/urlhaus/sync/payloads` | Sinkronisasi payload malware (Admin)                 |
+
+**System & Monitoring**
+| Method | Endpoint      | Deskripsi               |
+| ------ | ------------- | ----------------------- |
+| GET    | `/api/health` | Mengecek status backend |
+
+
+## 4. Alur Kerja Sistem
+- User mengakses Web Dashboard
+- User login → backend mengeluarkan JWT
+- Client menyimpan JWT dan mengirimkannya di setiap request
+- Backend memvalidasi JWT & role
+- Controller memproses permintaan
+- Database atau URLhaus API diakses
+- Response dikembalikan ke client dalam format JSON
 
 ## 🛠️ Teknologi yang Digunakan
 
