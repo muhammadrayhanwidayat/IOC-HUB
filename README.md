@@ -1,5 +1,7 @@
 # IOC-HUB (Jormungand Threat Intelligence Platform)
 
+
+
 IOC-HUB adalah **Threat Intelligence Platform** berbasis web yang digunakan untuk mengelola dan menganalisis **Indicators of Compromise (IOC)** seperti URL berbahaya, host, payload malware, dan data intelijen lainnya.  
 Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query ancaman eksternal.(saat ini hanya URL)
 
@@ -14,6 +16,28 @@ Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query a
 - 📊 **Statistik URL**
 - 🖥️ **Frontend Dashboard (Admin & User)**
 - 🗄️ **Database SQLite (Sequelize ORM)**
+
+---
+## tampilan web
+### home
+<img width="1919" height="1079" alt="Screenshot 2026-01-04 082625" src="https://github.com/user-attachments/assets/37a6e8e3-b448-4a15-a8f8-bd2a77a6b797" />
+
+### register
+<img width="1919" height="1079" alt="Screenshot 2026-01-04 082634" src="https://github.com/user-attachments/assets/b39619e9-7e5a-424d-93b8-cd56c11e4d48" />
+
+### login
+<img width="1919" height="1079" alt="Screenshot 2026-01-04 082641" src="https://github.com/user-attachments/assets/d9deb70a-86b1-4e77-8360-ca7efba9164a" />
+
+### health
+<img width="624" height="528" alt="Screenshot 2026-01-04 082655" src="https://github.com/user-attachments/assets/fc80f76e-fbb1-4823-b6d9-008a784d0a3a" />
+
+### dashboard
+<img width="1918" height="993" alt="Screenshot 2026-01-04 082718" src="https://github.com/user-attachments/assets/85fdc8a4-fd5c-4fdd-8376-92afae86ae61" />
+
+### admin
+<img width="1919" height="1079" alt="Screenshot 2026-01-04 082745" src="https://github.com/user-attachments/assets/019c3ec5-076e-4611-94a8-f78728f14316" />
+
+<img width="1919" height="1079" alt="Screenshot 2026-01-04 082754" src="https://github.com/user-attachments/assets/38c31ce0-6c88-48ca-8ef3-f60f5d39503a" />
 
 ---
 
