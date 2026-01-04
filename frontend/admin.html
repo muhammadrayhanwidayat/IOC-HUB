@@ -86,6 +86,33 @@
                 </div>
             </div>
         </div>
+        <div class="bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700">
+        <h3 class="font-bold mb-3">Add IOC Manually</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+            <input id="newValue" placeholder="URL"
+            class="px-3 py-2 bg-gray-700 rounded">
+
+            <input id="newThreat" placeholder="Threat"
+            class="px-3 py-2 bg-gray-700 rounded">
+
+            <select id="newStatus"
+            class="px-3 py-2 bg-gray-700 rounded">
+            <option value="online">Online</option>
+            <option value="offline">Offline</option>
+            <option value="unknown">Unknown</option>
+            </select>
+
+            <input id="newReporter" placeholder="Reporter"
+            class="px-3 py-2 bg-gray-700 rounded">
+        </div>
+
+        <button onclick="createIOC()"
+            class="mt-3 bg-green-600 hover:bg-green-700 px-4 py-2 rounded">
+            Add IOC
+        </button>
+        </div>
+
 
         <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
             <div class="flex justify-between items-center mb-4">
@@ -149,8 +176,46 @@
             </div>
         </div>
     </div>
+
+    
     
     <script src="assets/js/common.js"></script>
     <script src="assets/js/admin.js"></script>
+    <div id="editModal"
+  class="fixed inset-0 bg-black/60 hidden flex items-center justify-center z-50">
+  <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+    <h3 class="text-lg font-bold mb-4">Edit IOC</h3>
+
+    <input type="hidden" id="editId">
+
+    <label class="text-sm text-gray-400">Threat</label>
+    <input id="editThreat"
+      class="w-full mb-3 px-3 py-2 bg-gray-700 rounded">
+
+    <label class="text-sm text-gray-400">Status</label>
+    <select id="editStatus"
+      class="w-full mb-3 px-3 py-2 bg-gray-700 rounded">
+      <option value="online">Online</option>
+      <option value="offline">Offline</option>
+      <option value="unknown">Unknown</option>
+    </select>
+
+    <label class="text-sm text-gray-400">Reporter</label>
+    <input id="editReporter"
+      class="w-full mb-4 px-3 py-2 bg-gray-700 rounded">
+
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeEditModal()"
+        class="px-4 py-2 bg-gray-600 rounded">
+        Cancel
+      </button>
+      <button onclick="saveEditIOC()"
+        class="px-4 py-2 bg-blue-600 rounded">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

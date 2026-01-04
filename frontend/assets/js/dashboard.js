@@ -22,6 +22,8 @@ async function loadStatistics() {
 }
 
 async function loadIOCs() {
+  const search = document.getElementById('searchInput')?.value || '';
+
   const params = new URLSearchParams({
     page: currentPage,
     limit: 20,
@@ -29,6 +31,8 @@ async function loadIOCs() {
     sortBy: 'created_at',
     sortOrder: 'DESC'
   });
+
+  if (search) params.append('search', search);
 
   const data = await window.apiRequest(`/ioc?${params}`);
   if (!data?.success) return;
@@ -39,7 +43,7 @@ async function loadIOCs() {
     tbody.innerHTML = `
       <tr>
         <td colspan="3" class="text-center py-6 text-gray-400">
-          No URLs found
+          ✅ URL tidak ditemukan / URL aman
         </td>
       </tr>`;
     return;
@@ -47,7 +51,7 @@ async function loadIOCs() {
 
   tbody.innerHTML = data.data.iocs.map(ioc => `
     <tr class="hover:bg-gray-700">
-      <td class="px-4 py-2 font-mono text-sm">${ioc.value}</td>
+      <td class="px-4 py-2 font-mono text-sm break-all">${ioc.value}</td>
       <td class="px-4 py-2">${ioc.status}</td>
       <td class="px-4 py-2">
         ${new Date(ioc.createdAt).toLocaleDateString()}
@@ -56,12 +60,19 @@ async function loadIOCs() {
   `).join('');
 
   totalPages = data.data.pagination.totalPages;
-  document.getElementById('pageInfo').textContent =
-    `Page ${currentPage} of ${totalPages}`;
+  pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
 
   prevBtn.disabled = currentPage === 1;
   nextBtn.disabled = currentPage === totalPages;
 }
+
+
+
+function searchIOCs() {
+  currentPage = 1;
+  loadIOCs();
+}
+
 
 function changePage(delta) {
   currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
@@ -136,6 +147,12 @@ async function queryURLhaus() {
     </div>
   `;
 }
+
+document.getElementById('searchInput')?.addEventListener('keyup', e => {
+  if (e.key === 'Enter') {
+    searchIOCs();
+  }
+});
 
 
 if (window.checkAuth?.()) {

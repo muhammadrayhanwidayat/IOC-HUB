@@ -69,12 +69,16 @@ async function loadIOCs() {
       <td class="px-4 py-2">
         ${new Date(ioc.createdAt).toLocaleDateString()}
       </td>
-      <td class="px-4 py-2">
-        <button onclick="deleteIOC(${ioc.id})"
-          class="text-red-400 hover:text-red-300 text-sm">
-          Delete
-        </button>
-      </td>
+      <td class="px-4 py-2 space-x-2">
+  <button onclick="openEditIOC(${ioc.id})"
+    class="text-yellow-400 hover:text-yellow-300 text-sm">
+    Edit
+  </button>
+  <button onclick="deleteIOC(${ioc.id})"
+    class="text-red-400 hover:text-red-300 text-sm">
+    Delete
+  </button>
+</td>
     </tr>
   `).join('');
 
@@ -194,4 +198,80 @@ async function deleteIOC(id) {
     } else {
         alert('Failed to delete IOC');
     }
+}
+
+async function createIOC() {
+  const value = document.getElementById('newValue').value.trim();
+  if (!value) {
+    alert('URL wajib diisi');
+    return;
+  }
+
+  const payload = {
+    type: 'url',
+    value,
+    threat: document.getElementById('newThreat').value,
+    status: document.getElementById('newStatus').value,
+    reporter: document.getElementById('newReporter').value,
+    source: 'manual'
+  };
+
+  const res = await window.apiRequest('/ioc', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+
+  if (res?.success) {
+    alert('IOC added');
+    loadIOCs();
+    loadStatistics();
+
+    ['newValue','newThreat','newReporter']
+      .forEach(id => document.getElementById(id).value = '');
+  } else {
+    alert('Failed to add IOC');
+  }
+}
+
+function openEditIOC(id) {
+  const row = [...document.querySelectorAll('#iocTable tr')]
+    .find(tr => tr.innerHTML.includes(`deleteIOC(${id})`));
+
+  document.getElementById('editId').value = id;
+  document.getElementById('editThreat').value =
+    row.children[2].innerText === '-' ? '' : row.children[2].innerText;
+  document.getElementById('editStatus').value =
+    row.children[3].innerText;
+  document.getElementById('editReporter').value =
+    row.children[4].innerText === '-' ? '' : row.children[4].innerText;
+
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
+}
+
+async function saveEditIOC() {
+  const id = document.getElementById('editId').value;
+
+  const payload = {
+    threat: document.getElementById('editThreat').value,
+    status: document.getElementById('editStatus').value,
+    reporter: document.getElementById('editReporter').value
+  };
+
+  const res = await window.apiRequest(`/ioc/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload)
+  });
+
+  if (res?.success) {
+    closeEditModal();
+    loadIOCs();
+    loadStatistics();
+    alert('IOC updated');
+  } else {
+    alert('Failed to update IOC');
+  }
 }

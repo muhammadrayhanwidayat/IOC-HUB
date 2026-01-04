@@ -36,6 +36,23 @@
     <section class="bg-gray-800 rounded-lg p-4">
       <h2 class="text-lg font-bold mb-4">URL Database</h2>
 
+      <!-- Search IOC -->
+<div class="mb-4 flex gap-2">
+  <input
+    id="searchInput"
+    type="text"
+    placeholder="Search URL di database..."
+    class="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none"
+  />
+
+  <button
+    onclick="searchIOCs()"
+    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+    Search
+  </button>
+</div>
+
+
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-700">
           <thead class="bg-gray-700">
@@ -56,14 +73,17 @@
         <button id="nextBtn" onclick="changePage(1)"
           class="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">Next</button>
       </div>
+
+      
     </section>
+    
 
     <!-- Query -->
 <section class="mt-6">
   <form onsubmit="event.preventDefault(); queryURLhaus();">
     <div class="flex gap-2">
       <input id="queryInput"
-        placeholder="Masukkan URL (contoh: http://x.x.x.x/bin.sh)"
+        placeholder="cari url di URLhaus dan tambahkan ke database (contoh: http://x.x.x.x/bin.sh)"
         class="flex-1 border p-2 rounded bg-gray-800">
 
       <button type="submit"
