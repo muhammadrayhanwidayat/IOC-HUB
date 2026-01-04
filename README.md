@@ -44,6 +44,10 @@ Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query a
 ### General System Architecture
 <img width="2634" height="1173" alt="diagram-export-1-4-2026-8_43_46-AM" src="https://github.com/user-attachments/assets/76db22bf-541b-4eae-9292-5cadaabdd285" />
 
+### friendly diagram
+<img width="792" height="727" alt="image" src="https://github.com/user-attachments/assets/c1b7b538-e8aa-4ca1-b840-05c2565368bb" />
+
+
 ### 3 Tier Architecture (IOC-HUB)
 
 #### 1.Presentation Layer
