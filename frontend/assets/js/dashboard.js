@@ -142,7 +142,6 @@ async function queryURLhaus() {
       }
 
       <div class="text-xs text-gray-500 mt-2">
-        ✔ Disimpan ke database
       </div>
     </div>
   `;
