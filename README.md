@@ -32,7 +32,7 @@ Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query a
 <img width="624" height="528" alt="Screenshot 2026-01-04 082655" src="https://github.com/user-attachments/assets/fc80f76e-fbb1-4823-b6d9-008a784d0a3a" />
 
 ### dashboard
-<img width="1918" height="993" alt="Screenshot 2026-01-04 082718" src="https://github.com/user-attachments/assets/85fdc8a4-fd5c-4fdd-8376-92afae86ae61" />
+<img width="1868" height="844" alt="image" src="https://github.com/user-attachments/assets/6432b918-50eb-4150-a5f9-d8838f3f1679" />
 
 ### admin
 <img width="1919" height="1079" alt="Screenshot 2026-01-04 082745" src="https://github.com/user-attachments/assets/019c3ec5-076e-4611-94a8-f78728f14316" />
