@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 module.exports = (sequelize) => {
   const User = sequelize.define('User', {
@@ -41,6 +42,11 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    apiKey: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      // unique: true, // Disable unique constraint to avoid SQLite ALTER TABLE limitation
+    },
   }, {
     tableName: 'users',
     //hash password sebelum disimpan
@@ -49,6 +55,9 @@ module.exports = (sequelize) => {
         if (user.password) {
           const salt = await bcrypt.genSalt(10);
           user.password = await bcrypt.hash(user.password, salt);
+        }
+        if (!user.apiKey) {
+          user.apiKey = crypto.randomBytes(32).toString('hex');
         }
       },
       beforeUpdate: async (user) => {
@@ -60,11 +69,11 @@ module.exports = (sequelize) => {
     },
   });
 
-  User.prototype.comparePassword = async function(candidatePassword) {
+  User.prototype.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
   };
 
-  User.prototype.toJSON = function() {
+  User.prototype.toJSON = function () {
     const values = { ...this.get() };
     delete values.password;
     delete values.refresh_token;

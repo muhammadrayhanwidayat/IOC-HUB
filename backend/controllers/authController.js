@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');//import jwt
+const crypto = require('crypto');
 const { User } = require('../models');//import model User
 const jwtConfig = require('../config/jwt');//import config jwt
 
@@ -101,7 +102,16 @@ exports.login = async (req, res) => {
     }
     //generate token dengan fungsi generateTokens
     const { accessToken, refreshToken } = generateTokens(user);
-    await user.update({ refresh_token: refreshToken });
+
+    // Ensure user has an API key (for legacy users)
+    if (!user.apiKey) {
+      const apiKey = crypto.randomBytes(32).toString('hex');
+      await user.update({ refresh_token: refreshToken, apiKey: apiKey });
+      // Refresh user instance to include apiKey in toJSON
+      user.apiKey = apiKey;
+    } else {
+      await user.update({ refresh_token: refreshToken });
+    }
 
     res.json({
       success: true,

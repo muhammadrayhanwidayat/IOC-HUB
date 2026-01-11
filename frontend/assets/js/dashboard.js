@@ -112,9 +112,8 @@ async function queryURLhaus() {
       </div>
 
       <div><span class="text-gray-400">Status:</span>
-        <span class="${
-          ioc.status === 'online' ? 'text-red-400' : 'text-gray-300'
-        }">${ioc.status}</span>
+        <span class="${ioc.status === 'online' ? 'text-red-400' : 'text-gray-300'
+    }">${ioc.status}</span>
       </div>
 
       <div><span class="text-gray-400">Threat:</span>
@@ -129,22 +128,66 @@ async function queryURLhaus() {
         ${ioc.source}
       </div>
 
-      ${
-        ioc.urlhaus_reference
-          ? `<div>
+      ${ioc.urlhaus_reference
+      ? `<div>
               <a href="${ioc.urlhaus_reference}"
                  target="_blank"
                  class="text-blue-400 underline">
                 View on URLhaus
               </a>
             </div>`
-          : ''
-      }
+      : ''
+    }
 
       <div class="text-xs text-gray-500 mt-2">
       </div>
     </div>
   `;
+}
+
+async function loadApiKey() {
+  const display = document.getElementById('apiKeyDisplay');
+  let user = window.getAuthUser?.();
+
+  // If apiKey is missing in local storage (legacy login), fetch from profile
+  if (!user?.apiKey) {
+    try {
+      const res = await window.apiRequest('/auth/profile');
+      if (res && res.success) {
+        user = res.data;
+        // Update local storage so we don't need to fetch next time
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    } catch (e) {
+      console.error('Failed to fetch API key:', e);
+    }
+  }
+
+  if (user?.apiKey) {
+    display.value = user.apiKey;
+  } else {
+    display.value = 'Failed to load API Key. Please re-login.';
+  }
+}
+
+function copyApiKey() {
+  const copyText = document.getElementById("apiKeyDisplay");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(copyText.value);
+
+  const btn = document.querySelector('button[onclick="copyApiKey()"]');
+  const originalContent = btn.innerHTML;
+
+  btn.textContent = 'Copied!';
+  btn.classList.add('bg-green-600', 'hover:bg-green-700');
+  btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+
+  setTimeout(() => {
+    btn.innerHTML = originalContent;
+    btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+    btn.classList.add('bg-blue-600', 'hover:bg-blue-500');
+  }, 2000);
 }
 
 document.getElementById('searchInput')?.addEventListener('keyup', e => {
@@ -158,4 +201,5 @@ if (window.checkAuth?.()) {
   updateUserInfoDisplay();
   loadStatistics();
   loadIOCs();
+  loadApiKey();
 }
