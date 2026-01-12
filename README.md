@@ -1,21 +1,24 @@
 # IOC-HUB (Jormungand Threat Intelligence Platform)
 
 
-
-IOC-HUB adalah **Threat Intelligence Platform** berbasis web yang digunakan untuk mengelola dan menganalisis **Indicators of Compromise (IOC)** seperti URL berbahaya, host, payload malware, dan data intelijen lainnya.  
-Platform ini juga terintegrasi dengan **URLhaus** untuk sinkronisasi dan query ancaman eksternal.(saat ini hanya URL)
+IOC-HUB adalah sebuah platform intelijen ancaman yang dirancang untuk mengelola, membagikan, dan melakukan kueri terhadap Indicators of Compromise (IOC). Platform ini terintegrasi dengan data ancaman spesifik dari URLHaus dan menyediakan API yang aman baik untuk analis manusia (melalui Web Dashboard) maupun sistem otomatis (melalui API Key).
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-- 🔐 **Autentikasi JWT (Access & Refresh Token)**
-- 👤 **Role-based Access Control** (Admin & User)
-- 📦 **Manajemen URL** (Create, Read, Update, Delete)
-- 🌐 **Integrasi URLhaus API**
-- 📊 **Statistik URL**
-- 🖥️ **Frontend Dashboard (Admin & User)**
-- 🗄️ **Database SQLite (Sequelize ORM)**
+* **Dashboard**: Antarmuka web yang ramah pengguna untuk melihat statistik dan mengelola IOC.
+* **Autentikasi Ganda**:
+
+  * **JWT** untuk akses web yang aman.
+  * **API Key** untuk otomatisasi dan integrasi skrip yang mulus.
+* **Kontrol Akses Berbasis Peran (RBAC)**:
+  
+  * **Admin**: Kontrol penuh (Create, Read, Update, Delete), Sinkronisasi URLHaus.
+  * **User**: Akses hanya-baca dan kemampuan Query.
+* **Integrasi URLHaus**: Sinkronisasi URL berbahaya terbaru dan Payload langsung dari URLHaus.
+* **RESTful API**: Endpoint yang terdokumentasi sepenuhnya untuk integrasi kustom.
+
 
 ---
 ## tampilan web
@@ -326,3 +329,20 @@ Role    : admin
 * `GET  /api/urlhaus/sync/payloads` (Admin)
 
 ---
+
+## Penggunaan API
+
+### Authentication
+You can authenticate using either a **Bearer Token** (Login required) or an **API Key**.
+
+#### 1. Using API Key
+Add the following header to your requests:
+```http
+x-api-key: YOUR_API_KEY
+```
+
+#### 2. Using JWT (Login)
+1.  **POST** `/api/auth/login` with `username` and `password`.
+2.  Use the returned `accessToken` in the Authorization header:
+    ```http
+    Authorization: Bearer YOUR_ACCESS_TOKEN
