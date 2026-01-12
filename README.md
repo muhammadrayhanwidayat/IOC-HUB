@@ -48,7 +48,8 @@ IOC-HUB adalah sebuah platform intelijen ancaman yang dirancang untuk mengelola,
 <img width="2634" height="1173" alt="diagram-export-1-4-2026-8_43_46-AM" src="https://github.com/user-attachments/assets/76db22bf-541b-4eae-9292-5cadaabdd285" />
 
 ### friendly diagram
-<img width="792" height="727" alt="image" src="https://github.com/user-attachments/assets/c1b7b538-e8aa-4ca1-b840-05c2565368bb" />
+<img width="759" height="657" alt="image" src="https://github.com/user-attachments/assets/acf79d6b-015c-4288-b217-4765b9ad4abc" />
+
 
 
 ### 3 Tier Architecture (IOC-HUB)
@@ -81,6 +82,7 @@ HTML
 Authentication & Authorization
 - Login, Register, Logout
 - JWT Access & Refresh Token
+- APIKEY
   
 Role-Based Access Control
 - Admin
@@ -96,6 +98,7 @@ IOC Statistics & Reporting
 
 **Security**
 - JWT Authentication
+- APIKEY
 - Refresh Token Validation
 - Role-Based Access Control
 - Input Validation & Sanitization
@@ -165,6 +168,7 @@ Tabel Utama
 - Sequelize ORM
 - SQLite
 - JSON Web Token (JWT)
+- APIKEY
 - bcryptjs
 - axios
 
@@ -281,7 +285,7 @@ npm run dev
 
 ### 5. Akses Aplikasi
 
-* Frontend: `http://localhost:3000`
+* Frontend: `http://localhost`
 * API Base URL: `http://localhost:3000/api`
 
 ---
